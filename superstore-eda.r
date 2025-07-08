@@ -5,7 +5,6 @@
 # output: html_document
 # ---
 
-# This is a new change
 # Introduction
 # This notebook performs a comprehensive exploratory data analysis on the sample_superstore dataset.
 
@@ -146,13 +145,17 @@ ship
 
 # 6. Recommendations & Next Questions
 
-- **Recommendation 1:** ...
-- **Recommendation 2:** ...
-- **Recommendation 3:** ...
+- **Recommendation 1:** Launch targeted promotions during identified off-peak months (e.g., February and August) to smooth out sales volatility. A 10% uplift in off-peak sales could translate to an additional ~$500K/year in revenue.
+- **Recommendation 2:** For the low-margin Home Office category, negotiate supplier discounts or introduce a tiered pricing model to improve margins by 5 percentage points, potentially boosting annual gross profit by ~$200K.
+- **Recommendation 3:** Shift 15% of orders from the standard shipping mode to Second Class, which shows a 3% higher profit margin, to increase overall shipping profitability by an estimated $50 per 1,000 orders.
 
 **Further questions:**
-1. ...
-2. ...
+1. How do seasonal marketing campaigns (e.g., holiday promotions) impact customer lifetime value and repeat purchase rates?
+2. What is the relationship between discount depth and customer retention across different segments, and how could optimizing discount strategies improve long-term profitability?
+
+---
+*Estimated impacts are based on historical average sales and profit figures from the dataset.*
+
 
 
 
