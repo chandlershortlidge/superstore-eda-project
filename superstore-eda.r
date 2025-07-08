@@ -87,15 +87,50 @@ region_perf
 # 4. Customer Segmentation (RFM)
 
 ```{r rfm}
+# Ensure report_date is defined before computing recency
+report_date <- max(superstore$Order.Date, na.rm = TRUE)
+
+# Calculate Recency, Frequency, Monetary value for each customer
 rfm <- superstore %>%
   group_by(`Customer ID`) %>%
   summarize(
-    recency = as.numeric(difftime(max(Order.Date), max(Order.Date), units="days")),
+    recency   = as.numeric(difftime(report_date, max(Order.Date), units = "days")),
     frequency = n(),
-    monetary = sum(Sales)
+    monetary  = sum(Sales, na.rm = TRUE),
+    .groups = "drop"
   )
-# score and segment... (code continues)
-```
+
+# Score each RFM metric on a 1-5 scale
+rfm_scored <- rfm %>%
+  mutate(
+    r_score = ntile(-recency, 5),    # more recent = higher score
+    f_score = ntile(frequency, 5),   # more orders = higher score
+    m_score = ntile(monetary, 5)     # more spending = higher score
+  ) %>%
+  mutate(rfm_score = paste(r_score, f_score, m_score, sep = ""))
+
+# Segment customers
+rfm_segmented <- rfm_scored %>%
+  mutate(
+    segment = case_when(
+      r_score >= 4 & f_score >= 4 & m_score >= 4 ~ "Champions",
+      r_score >= 3 & f_score >= 3 & m_score >= 3 ~ "Loyal Customers",
+      r_score >= 3 & (f_score <= 2 | m_score <= 2) ~ "Potential Loyalists",
+      r_score <= 2 & f_score >= 3                  ~ "At Risk",
+      TRUE                                         ~ "Others"
+    )
+  )
+
+# Display segment counts and revenue
+segment_pct <- rfm_segmented %>% count(segment) %>% mutate(pct = n / sum(n) * 100)
+revenue_by_segment <- superstore %>%
+  inner_join(rfm_segmented, by = "Customer ID") %>%
+  group_by(segment) %>%
+  summarize(total_revenue = sum(Sales, na.rm = TRUE)) %>%
+  arrange(desc(total_revenue))
+
+segment_pct
+revenue_by_segment
 
 # 5. Shipping Mode Profitability
 
