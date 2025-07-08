@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Other history/log files
+.Rapp.history
